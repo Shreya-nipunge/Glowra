@@ -1,0 +1,27 @@
+# Core framework
+flask>=3.1.2
+flask-cors>=6.0.1
+flask-limiter
+
+# Environment management
+python-dotenv>=1.1.1
+
+# Data validation
+pydantic>=2.11.7
+
+# Google Firebase
+firebase-admin>=7.1.0
+
+# Google Cloud SDKs
+google-cloud-firestore>=2.21.0
+google-cloud-bigquery>=3.36.0
+google-cloud-storage>=3.3.0
+google-auth
+
+# Gemini / Vertex AI
+google-genai>=1.31.0
+tenacity
+
+# Utilities
+requests
+python-dateutil
