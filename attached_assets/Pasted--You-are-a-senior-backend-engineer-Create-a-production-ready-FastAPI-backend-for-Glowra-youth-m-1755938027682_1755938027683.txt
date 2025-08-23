@@ -1,0 +1,373 @@
+**You are a senior backend engineer.** Create a production-ready FastAPI backend for Glowra (youth mental-wellness companion) using **Google Cloud** services and **Vertex AI (Gemini)**. Follow every requirement below exactly, generate files with complete code (no TODO stubs unless credentials are required), and include brief inline comments where helpful.
+
+### 0) Project meta
+
+- Name: `glowra-backend`
+- Runtime: Python 3.11+
+- Package manager: `pip` (simple) or `poetry` (OK). If `pip`, pin versions in `requirements.txt`.
+- Entry: `app/main.py`
+- App port: **8080** (for Cloud Run compatibility)
+- Coding standards: Pydantic v2, type hints, docstrings, small cohesive modules.
+- Testing: `pytest`
+- Logging: `loguru`
+- Env management: `.env` via `python-dotenv`
+
+---
+
+### 1) Features & APIs (MVP scope)
+
+Implement these REST endpoints with OpenAPI docs:
+
+**Public**
+
+- `GET /health` → `{status:"ok", service:"mindmate-backend"}`
+
+**Auth (Firebase)**
+
+- All endpoints below **require Firebase ID token** in `Authorization: Bearer <token>`.
+- Implement a dependency `get_current_user()` using `firebase_admin.auth.verify_id_token`.
+- Add `DEV_MODE` env flag; if `true`, allow `X-Dev-User-Id` header to bypass Firebase for local dev.
+
+**Mood logging & journaling**
+
+- `POST /moods`
+    
+    Body: `{ mood: "happy|sad|stressed|anxious|neutral", energy: int(0-10), stress: int(0-10), note?: string }`
+    
+    Action: store in Firestore (or Cloud SQL if chosen) with `user_id`, `timestamp`. Also stream a lightweight row to **BigQuery** (analytics).
+    
+- `GET /moods?from=<iso>&to=<iso>` → list current user’s logs.
+
+**AI insights (Gemini on Vertex AI)**
+
+- `POST /insights/journal`
+    
+    Body: `{ text: string }`
+    
+    Action: Call **Vertex AI Gemini** with a **JSON schema** to return:
+    
+    ```json
+    {
+      "mood": "stressed|anxious|sad|neutral|happy",
+      "categories": ["exam_anxiety","procrastination","sleep","loneliness","burnout"],
+      "confidence": 0-1,
+      "recommendations": [
+        {"type":"breathing","title":"5-min box breathing","duration_min":5,"resource_url": "<gs:// or https://>"}
+      ],
+      "risk": "low|moderate|high",
+      "message":"kind, validating reflection in 1-2 sentences"
+    }
+    
+    ```
+    
+    Store response with journal, and for `risk=="high"` add a field `escalation_advice` (non-diagnostic: helplines/resources message).
+    
+    Return that JSON to client.
+    
+
+**Recommendations**
+
+- `GET /recommendations/today`
+    
+    Combine last 7 days’ mood + the most recent journal insight to propose a daily plan: 3–5 tasks (mix of Pomodoro block, breathing, light exercise, journaling prompt), each with `cta_type` and `estimated_minutes`. Persist the plan for the day if not present.
+    
+
+**Progress & gamification**
+
+- `GET /progress/weekly` → rollups: average mood, average stress/energy, streak days, completed tasks count.
+- `GET /gamification/badges` → compute simple badges: `first_check_in`, `7_day_streak`, `focus_hero` (10 Pomodoros), etc.
+
+**Peer (optional if time)**
+
+- `POST /peer/match` → store interest tags; return a simple group label (e.g., `"exam-anxiety-sophomores"`). (UI can join group chat on frontend via Firestore later.)
+
+Add permissive **CORS** for the frontend origin (`FRONTEND_ORIGIN` env).
+
+---
+
+### 2) Data layer choices (pick Firestore by default)
+
+**Option A – Firestore (default)**
+
+- Collections:
+    - `users/{user_id}` (profile basics, created_at)
+    - `mood_logs/{doc}` with fields: `user_id`, `mood`, `energy`, `stress`, `note`, `ts`
+    - `journal_insights/{doc}` with `user_id`, `input_text`, `gemini_json`, `ts`
+    - `daily_plans/{user_id:date}`: list of tasks with status
+    - `achievements/{user_id}`: badge keys
+- Add composite index hints if needed in code comments.
+
+**Option B – Cloud SQL (Postgres)**
+
+If env `DB_ENGINE=postgres`, create SQLAlchemy models and migrations (alembic). Keep the same logical schema.
+
+---
+
+### 3) Google Cloud integrations
+
+Create **service modules** under `app/services/`:
+
+- `vertex_ai.py`
+    - Initialize Vertex AI (`aiplatform.init(project=GCP_PROJECT, location=GCP_LOCATION)`).
+    - Use **Gemini** text model (name from `VERTEX_MODEL` env, e.g., `gemini-1.5-pro`), **responses in strict JSON** using schema/formatting instructions.
+    - Two functions:
+        - `analyze_journal(text: str) -> dict` (returns the JSON structure above)
+        - `classify_risk(text: str) -> Literal["low","moderate","high"]` (used as a guardrail; included in `analyze_journal`)
+    - Include retry with `tenacity`.
+- `firestore_client.py` OR `sql_client.py` depending on DB.
+- `bigquery_client.py`
+    - Dataset from `BQ_DATASET` (e.g., `mindmate_analytics`) and tables:
+        - `mood_logs_stream` (user_id, mood, energy, stress, ts)
+        - `journal_insights_stream` (user_id, categories, risk, confidence, ts)
+    - Provide `stream_mood_log(row)` and `stream_journal(row)`.
+- `storage.py`
+    - Signed URL helpers to **Cloud Storage** bucket `GCS_BUCKET` (for meditation audio, etc.).
+- `auth.py`
+    - Firebase Admin init using `GOOGLE_APPLICATION_CREDENTIALS`.
+    - `get_current_user()` FastAPI dependency.
+
+---
+
+### 4) Project structure
+
+Create this tree and fill **all** files:
+
+```
+mindmate-backend/
+  app/
+    __init__.py
+    main.py
+    config.py
+    deps.py
+    models/            # pydantic schemas (not DB ORM)
+      __init__.py
+      auth.py
+      mood.py
+      insight.py
+      plan.py
+      progress.py
+    routers/
+      __init__.py
+      health.py
+      auth_guard.py
+      moods.py
+      insights.py
+      recommendations.py
+      progress.py
+      gamification.py
+      peer.py
+    services/
+      __init__.py
+      vertex_ai.py
+      firestore_client.py
+      bigquery_client.py
+      storage.py
+      auth.py
+      analytics.py
+    utils/
+      __init__.py
+      time.py
+      ids.py
+      logging.py
+  tests/
+    test_health.py
+    test_moods.py
+    test_insights.py
+  .env.example
+  requirements.txt
+  Dockerfile
+  .dockerignore
+  README.md
+
+```
+
+---
+
+### 5) Environment & config
+
+Create `app/config.py` to read:
+
+```
+APP_NAME=mindmate-backend
+PORT=8080
+DEV_MODE=true|false
+FRONTEND_ORIGIN=https://<frontend-domain-or-localhost>
+GCP_PROJECT=<project-id>
+GCP_LOCATION=<region, e.g., us-central1 or asia-south1>
+GOOGLE_APPLICATION_CREDENTIALS=/home/runner/keys/service-account.json
+VERTEX_MODEL=gemini-1.5-pro
+FIREBASE_PROJECT_ID=<firebase-project-id>
+DB_ENGINE=firestore|postgres
+# If postgres:
+DATABASE_URL=postgresql+psycopg2://user:pass@host:5432/db
+# Analytics:
+BQ_DATASET=mindmate_analytics
+BQ_MOOD_TABLE=mood_logs_stream
+BQ_INSIGHT_TABLE=journal_insights_stream
+# Storage:
+GCS_BUCKET=mindmate-assets
+
+```
+
+Also create `.env.example` populated with the above keys and short comments.
+
+---
+
+### 6) Dependencies (requirements.txt)
+
+Add and pin stable versions (latest compatible), for example:
+
+```
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+google-cloud-aiplatform
+google-cloud-firestore
+google-cloud-bigquery
+google-cloud-storage
+firebase-admin
+httpx
+tenacity
+loguru
+pytest
+
+```
+
+If Postgres option is implemented:
+
+```
+sqlalchemy
+psycopg2-binary
+alembic
+
+```
+
+---
+
+### 7) Implementation details
+
+- **main.py**
+    - Create FastAPI app, add CORS (`FRONTEND_ORIGIN`), include routers, mount `/docs` and `/redoc`.
+    - Health router simple ping.
+- **Auth guard**
+    - Dependency verifies Firebase token (or `DEV_MODE` header).
+    - Attach `user_id` to `Request.state.user_id`.
+- **Schemas (Pydantic)**
+    - `MoodLogIn`, `MoodLogOut`
+    - `JournalIn`, `InsightOut` (match JSON schema specified)
+    - `DailyPlanOut` (list[Task]) with `Task = {id, title, cta_type, estimated_minutes, status}`
+    - `ProgressWeeklyOut` (averages, streaks, counts)
+    - `BadgesOut` (list of strings)
+- **Routers**
+    - `POST /moods` writes to Firestore and streams to BQ.
+    - `GET /moods` reads query-range by `user_id` and time.
+    - `POST /insights/journal` calls Vertex, persists raw JSON, streams summary row to BQ.
+    - `GET /recommendations/today` synthesizes a plan from latest data; save if first call of day.
+    - `GET /progress/weekly` aggregates from Firestore query; compute streaks.
+    - `GET /gamification/badges` simple computed badges.
+- **Vertex AI prompt**
+    - Use system instruction that responses **must** be valid JSON only.
+    - Provide explicit JSON schema (as above). Validate with `pydantic` before returning.
+    - Add safety: if output parsing fails, retry once with a repair prompt.
+- **Risk handling**
+    - If `risk=="high"`, include a neutral, non-diagnostic message and an India-friendly help text (e.g., “Consider talking to a trusted person or a counselor/helpline.”). Do **not** store sensitive content beyond what’s necessary for features.
+- **BigQuery**
+    - Create dataset/table if missing (best-effort on startup or lazy create on first write).
+    - Insert rows with minimal PII (`user_id` as a hashed ID if you prefer).
+- **Storage**
+    - Provide a helper that returns signed URLs for `gs://` content so frontend can play meditation audio.
+- **Observability**
+    - Centralized `loguru` logger; log request IDs, user_id (hashed), endpoint, and latency.
+
+---
+
+### 8) Docker & Cloud Run
+
+**Dockerfile** (use slim base, expose 8080, run uvicorn):
+
+```
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+ENV PORT=8080
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+```
+
+`.dockerignore`: `__pycache__`, `.venv`, `.git`, `*.pyc`, `*.log`, `.env`, `keys/`
+
+**Deploy notes (write in README.md)**
+
+- Ensure service account JSON is available and `GOOGLE_APPLICATION_CREDENTIALS` is set.
+- Example commands (document them; don’t run):
+
+```
+gcloud auth login
+gcloud config set project $GCP_PROJECT
+gcloud builds submit --tag gcr.io/$GCP_PROJECT/mindmate-backend
+gcloud run deploy mindmate-backend --image gcr.io/$GCP_PROJECT/mindmate-backend --region $GCP_LOCATION --platform managed --allow-unauthenticated --port 8080
+
+```
+
+---
+
+### 9) Local dev commands
+
+- `pip install -r requirements.txt`
+- `python -m uvicorn app.main:app --reload --port 8080`
+- `pytest -q`
+
+Provide sample **curl** commands in README:
+
+```
+curl http://localhost:8080/health
+curl -X POST http://localhost:8080/moods \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <FIREBASE_ID_TOKEN>" \
+  -d '{"mood":"stressed","energy":3,"stress":8,"note":"exam tomorrow"}'
+
+```
+
+Include a **DEV_MODE example** (no Firebase) using `-H "X-Dev-User-Id: demo-user-123"`.
+
+---
+
+### 10) Minimal test coverage
+
+- `test_health.py` → status 200
+- `test_moods.py` → with `DEV_MODE` header, POST+GET roundtrip using an in-memory or mocked Firestore client (write a simple repository layer so it’s mockable).
+- `test_insights.py` → mock `vertex_ai.analyze_journal` to return a fixed JSON; assert schema and storage call.
+
+---
+
+### 11) Security & privacy notes (bake into README)
+
+- Not a medical device. No diagnoses. Provide supportive language only.
+- Store least data needed; allow deletion endpoint in future.
+- Respect CORS to only allow `FRONTEND_ORIGIN`.
+
+---
+
+### 12) Deliverables checklist (generate all)
+
+- ✅ Complete file tree above with code
+- ✅ `.env.example` populated
+- ✅ Working `/health`, `/moods`, `/insights/journal`, `/recommendations/today`, `/progress/weekly`, `/gamification/badges`
+- ✅ Vertex AI (Gemini) client integration with JSON-only outputs
+- ✅ Firebase Auth verification & `DEV_MODE` bypass
+- ✅ Firestore persistence (default) and BigQuery streaming
+- ✅ Dockerfile + README with Cloud Run deployment guide
+- ✅ Basic tests passing (`pytest`)
+
+**After generating files**, print:
+
+1. how to run locally,
+2. how to set the required env vars on Replit,
+3. any manual steps for GCP (enabling APIs, uploading service account JSON to a safe path in Replit).
+
+---
+
+**Now implement everything above.** If anything is ambiguous, choose the simplest option that satisfies the feature and explain briefly in README. Make sure the app boots and `/docs` shows the endpoints.

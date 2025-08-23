@@ -1,0 +1,131 @@
+You are building the Glowra Backend, the core engine powering a youth mental wellness companion platform.
+
+Since Replit doesn’t support Docker/Cloud Run directly, adapt the plan as follows:
+
+📌 Project Overview
+
+Glowra is a journey-based mental wellness platform for students/youth that:
+
+Entry point → Interactive AI chatbot/journaling (collects mood + context).
+
+Guidance layer → Personalized recommendations (planner, resources, exercises).
+
+Engagement layer → Gamification, community connect, mentor integration.
+
+Tracking layer → Progress dashboard (analytics + reports).
+
+Your responsibility is to implement the Backend/AI system using Flask on Replit with Google Cloud integrations.
+
+🛠 Tech Stack (Backend/AI)
+
+Framework: Flask (instead of FastAPI, due to Replit limitation).
+
+Auth: Firebase Auth (for secure login/signup).
+
+Database: Google Firestore (flexible for journaling + user progress).
+
+AI Layer:
+
+Vertex AI + Gemini → journaling sentiment, recommendations, chatbot.
+
+Gemma (optional) → lightweight local inference if needed.
+
+Analytics: BigQuery + Vertex AI dashboards.
+
+Storage: Google Cloud Storage (for audio, meditation files).
+
+📂 Backend Roadmap (Tasks for You)
+
+Implement these modules one by one:
+
+1. 🔑 Authentication
+
+Integrate Firebase Auth into Flask routes.
+
+Expose endpoints for /signup, /login, /logout.
+
+Secure API routes using Firebase tokens.
+
+2. 🧠 AI Journal + Chatbot
+
+Endpoint: /journal (POST) → Accepts text input from user journaling.
+
+Process:
+
+Send text → Vertex AI (Gemini) for sentiment/emotion classification.
+
+Generate supportive response + store both input & AI output in Firestore.
+
+Endpoint: /chat (POST) → AI-powered guidance/therapy-style chatbot.
+
+3. 📅 Planner & Resources
+
+Endpoint: /planner → Return personalized action items (exercises, study tips, meditation tasks) from Firestore.
+
+Allow journaling → trigger tailored daily planner update.
+
+4. 🏆 Engagement Layer
+
+Add gamification: streaks, points, badges API.
+
+Store progress in Firestore.
+
+Endpoint: /community → placeholder API for connecting to mentor/peer groups.
+
+5. 📊 Analytics & Tracking
+
+Store user journaling metadata in BigQuery for analytics.
+
+Expose /progress → returns user stats (mood trends, streaks, tasks completed).
+
+Future: Integrate Vertex AI Dashboards.
+
+6. 🎧 Multimedia & Storage
+
+Endpoint /meditations → fetch list of meditation audio files from Cloud Storage.
+
+Endpoint /upload → support saving voice/text journaling.
+
+📦 Implementation Notes
+
+Use Flask’s Blueprints to organize routes (auth, journal, planner, progress).
+
+Connect Google Cloud SDK → Firestore, BigQuery, Vertex AI, Storage.
+
+Keep API modular for easy scaling to Cloud Run later.
+
+Use requirements.txt:
+
+flask
+firebase-admin
+google-cloud-firestore
+google-cloud-bigquery
+google-cloud-storage
+google-cloud-aiplatform
+
+
+Deploy/test fully in Replit first. Cloud deployment comes later.
+
+✅ Deliverables in Replit
+
+app.py (Flask entry point).
+
+/routes folder → auth.py, journal.py, planner.py, progress.py.
+
+requirements.txt with all dependencies.
+
+config.py → Firebase + Google Cloud credentials.
+
+Working APIs:
+
+/signup, /login
+
+/journal, /chat
+
+/planner
+
+/progress
+
+/meditations
+
+💡 Key instruction for Replit: Stick to Flask instead of FastAPI. Avoid Docker. Use Google Cloud libraries (Firestore, BigQuery, Vertex AI). Keep modular structure. Build endpoints incrementally.
