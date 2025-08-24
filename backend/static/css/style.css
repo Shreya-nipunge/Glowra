@@ -1,0 +1,482 @@
+/* Custom styles for Glowra */
+
+/* Hero section styling */
+.hero-section {
+    background: linear-gradient(135deg, var(--bs-dark) 0%, var(--bs-gray-800) 100%);
+    min-height: 100vh;
+}
+
+.hero-content h1 {
+    line-height: 1.2;
+}
+
+.feature-item {
+    padding: 0.5rem 0;
+}
+
+.feature-item i {
+    width: 24px;
+    height: 24px;
+}
+
+/* Floating cards animation */
+.floating-card {
+    animation: float 6s ease-in-out infinite;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+.floating-card:nth-child(2) {
+    animation-delay: -3s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Mood indicator styling */
+.mood-indicator {
+    padding: 0.5rem;
+}
+
+.mood-emoji {
+    font-size: 1.5rem;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.mood-emoji:hover,
+.mood-emoji.active {
+    background-color: var(--bs-primary);
+    transform: scale(1.2);
+}
+
+/* Feature cards */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+.feature-icon i {
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+}
+
+/* CTA section */
+.cta-section {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-info) 100%);
+}
+
+/* Dashboard specific styles */
+.welcome-card {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-info) 100%);
+    color: white;
+}
+
+.welcome-card h2,
+.welcome-card p {
+    color: white;
+}
+
+.stat-card {
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+}
+
+/* Task items */
+.task-item {
+    transition: all 0.3s ease;
+    border: 1px solid var(--bs-border-color);
+}
+
+.task-item:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+    color: var(--bs-body-color);
+    margin-bottom: 0.25rem;
+}
+
+.task-description {
+    font-size: 0.8rem;
+}
+
+/* Badge items */
+.badge-item {
+    transition: transform 0.3s ease;
+}
+
+.badge-item:hover {
+    transform: scale(1.02);
+}
+
+.badge-icon {
+    font-size: 1.5rem;
+}
+
+/* Chat styles */
+.chat-container {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    background-color: var(--bs-body-bg);
+}
+
+.chat-message {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-content {
+    word-wrap: break-word;
+    max-width: 70%;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+}
+
+/* Typing indicator */
+.typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--bs-secondary);
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Mood selector in modal */
+.mood-selector {
+    gap: 0.5rem;
+}
+
+.mood-selector .btn {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+}
+
+.mood-selector .btn-check:checked + .btn {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+/* Range sliders */
+.form-range {
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-thumb {
+    background-color: var(--bs-primary);
+}
+
+.form-range::-moz-range-thumb {
+    background-color: var(--bs-primary);
+    border: none;
+}
+
+/* Journal text area */
+#journal-text {
+    min-height: 200px;
+    resize: vertical;
+}
+
+/* Entry items */
+.entry-item {
+    transition: all 0.3s ease;
+    border: 1px solid var(--bs-border-color);
+}
+
+.entry-item:hover {
+    border-color: var(--bs-primary);
+    background-color: var(--bs-light);
+}
+
+.entry-preview {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Meditation cards */
+.meditation-card {
+    transition: transform 0.3s ease;
+}
+
+.meditation-card:hover {
+    transform: translateY(-2px);
+}
+
+.meditation-category {
+    margin-bottom: 2rem;
+}
+
+.category-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Audio controls styling */
+audio {
+    filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: var(--bs-light);
+}
+
+/* Insight modal styles */
+.insight-content {
+    line-height: 1.6;
+}
+
+.mood-display {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+.mood-emoji {
+    font-size: 1.5rem;
+}
+
+.mood-text {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.categories-list .badge {
+    text-transform: capitalize;
+    margin-bottom: 0.5rem;
+}
+
+.recommendation-item {
+    transition: transform 0.2s ease;
+}
+
+.recommendation-item:hover {
+    transform: scale(1.02);
+}
+
+/* Navigation styling */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-brand i {
+    color: var(--bs-warning);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-features .row {
+        gap: 1rem;
+    }
+    
+    .floating-card {
+        margin-bottom: 2rem;
+    }
+    
+    .mood-selector {
+        flex-direction: column;
+    }
+    
+    .mood-selector .btn {
+        margin-bottom: 0.5rem;
+    }
+    
+    .chat-container {
+        height: 300px;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .feature-item {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .welcome-card .card-body {
+        text-align: center;
+    }
+    
+    .streak-counter {
+        margin-top: 1rem;
+        justify-content: center !important;
+    }
+}
+
+/* Dark theme enhancements */
+[data-bs-theme="dark"] .floating-card {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+}
+
+[data-bs-theme="dark"] .task-item {
+    background-color: var(--bs-gray-900);
+}
+
+[data-bs-theme="dark"] .entry-item:hover {
+    background-color: var(--bs-gray-800);
+}
+
+[data-bs-theme="dark"] .badge-item {
+    background-color: var(--bs-gray-800) !important;
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .chat-container {
+    background-color: var(--bs-gray-900);
+    border-color: var(--bs-gray-700);
+}
+
+[data-bs-theme="dark"] audio {
+    filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(88%);
+}
+
+/* Loading states */
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Utility classes */
+.text-gradient {
+    background: linear-gradient(135deg, var(--bs-primary), var(--bs-info));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-gradient {
+    background: linear-gradient(135deg, var(--bs-primary), var(--bs-info));
+}
+
+/* Animation utilities */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,6 +1,7 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*.pyc
 build/
 dist/
 wheels/
@@ -17,3 +18,5 @@ venv/
 
 # Firebase service account
 service-account.json
+
+uv.lock

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Glowra</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i data-feather="sun" class="me-2"></i>
+                Glowra
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">
+                            <i data-feather="home" class="me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#journal">
+                            <i data-feather="edit-3" class="me-1"></i>Journal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#chat">
+                            <i data-feather="message-circle" class="me-1"></i>Chat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#meditations">
+                            <i data-feather="headphones" class="me-1"></i>Meditations
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i data-feather="user" class="me-1"></i>
+                            <span id="user-display-name">User</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button id="logout-btn" class="dropdown-item">
+                                <i data-feather="log-out" class="me-2"></i>Sign Out
+                            </button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+        <!-- Dashboard Overview -->
+        <div id="dashboard-section">
+            <!-- Welcome Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="welcome-card card border-0 bg-gradient">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2 class="card-title fw-bold mb-2">
+                                        Welcome back, <span id="welcome-name">Friend</span>! 🌟
+                                    </h2>
+                                    <p class="card-text text-muted mb-0">
+                                        Ready to continue your wellness journey today?
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <div class="streak-counter">
+                                        <div class="d-flex align-items-center justify-content-md-end">
+                                            <i data-feather="zap" class="text-warning me-2"></i>
+                                            <span class="fw-bold" id="current-streak">0</span>
+                                            <span class="text-muted ms-1">day streak</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i data-feather="heart" class="stat-icon text-danger mb-2"></i>
+                            <h3 class="stat-number" id="total-mood-logs">0</h3>
+                            <p class="stat-label text-muted mb-0">Mood Check-ins</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i data-feather="book-open" class="stat-icon text-primary mb-2"></i>
+                            <h3 class="stat-number" id="total-journal-entries">0</h3>
+                            <p class="stat-label text-muted mb-0">Journal Entries</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i data-feather="award" class="stat-icon text-warning mb-2"></i>
+                            <h3 class="stat-number" id="total-points">0</h3>
+                            <p class="stat-label text-muted mb-0">Wellness Points</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i data-feather="check-circle" class="stat-icon text-success mb-2"></i>
+                            <h3 class="stat-number" id="completed-tasks">0</h3>
+                            <p class="stat-label text-muted mb-0">Tasks Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Row -->
+            <div class="row">
+                <!-- Daily Plan -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i data-feather="calendar" class="me-2"></i>
+                                    Today's Wellness Plan
+                                </h5>
+                                <button id="refresh-plan-btn" class="btn btn-sm btn-outline-primary">
+                                    <i data-feather="refresh-cw"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="daily-plan-loading" class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div id="daily-plan-content" class="d-none">
+                                <div id="daily-tasks-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="zap" class="me-2"></i>
+                                Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <button id="quick-mood-btn" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                        <i data-feather="heart" class="mb-2"></i>
+                                        <span>Log Mood</span>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button id="quick-journal-btn" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                        <i data-feather="edit-3" class="mb-2"></i>
+                                        <span>Journal</span>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button id="quick-chat-btn" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                        <i data-feather="message-circle" class="mb-2"></i>
+                                        <span>Chat with AI</span>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button id="quick-meditation-btn" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                        <i data-feather="headphones" class="mb-2"></i>
+                                        <span>Meditate</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <!-- Mood Trends -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="trending-up" class="me-2"></i>
+                                Mood Trends (Last 7 Days)
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="mood-chart" height="100"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Badges -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="award" class="me-2"></i>
+                                Recent Badges
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="badges-loading" class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div id="badges-content" class="d-none">
+                                <div id="badges-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Section -->
+        <div id="journal-section" class="d-none">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="edit-3" class="me-2"></i>
+                                Journal Entry
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="journal-form">
+                                <div class="mb-3">
+                                    <label for="journal-text" class="form-label">What's on your mind?</label>
+                                    <textarea id="journal-text" class="form-control" rows="8" 
+                                              placeholder="Express your thoughts freely... AI will provide supportive insights."></textarea>
+                                    <div class="form-text">
+                                        <span id="word-count">0</span> words
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" id="journal-save-btn" class="btn btn-primary">
+                                        <i data-feather="send" class="me-2"></i>
+                                        Submit Entry
+                                    </button>
+                                    <button type="button" id="journal-clear-btn" class="btn btn-outline-secondary">
+                                        Clear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="clock" class="me-2"></i>
+                                Recent Entries
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recent-entries-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Section -->
+        <div id="chat-section" class="d-none">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="message-circle" class="me-2"></i>
+                                Chat with Glowra AI
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="chat-messages" class="chat-container mb-3"></div>
+                            
+                            <form id="chat-form">
+                                <div class="input-group">
+                                    <input type="text" id="chat-input" class="form-control" 
+                                           placeholder="Type your message...">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i data-feather="send"></i>
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div id="chat-suggestions" class="mt-3">
+                                <small class="text-muted">Suggestions:</small>
+                                <div id="suggestions-list" class="mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meditations Section -->
+        <div id="meditations-section" class="d-none">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="card-title mb-0">
+                                <i data-feather="headphones" class="me-2"></i>
+                                Meditation Library
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="meditations-content">
+                                <div class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading meditations...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mood Log Modal -->
+    <div class="modal fade" id="moodModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i data-feather="heart" class="me-2"></i>
+                        Log Your Mood
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="mood-form">
+                        <div class="mb-3">
+                            <label class="form-label">How are you feeling?</label>
+                            <div class="mood-selector d-flex justify-content-between">
+                                <input type="radio" class="btn-check" name="mood" id="mood-happy" value="happy">
+                                <label class="btn btn-outline-primary" for="mood-happy">😊 Happy</label>
+                                
+                                <input type="radio" class="btn-check" name="mood" id="mood-neutral" value="neutral">
+                                <label class="btn btn-outline-primary" for="mood-neutral">😐 Neutral</label>
+                                
+                                <input type="radio" class="btn-check" name="mood" id="mood-stressed" value="stressed">
+                                <label class="btn btn-outline-primary" for="mood-stressed">😰 Stressed</label>
+                                
+                                <input type="radio" class="btn-check" name="mood" id="mood-anxious" value="anxious">
+                                <label class="btn btn-outline-primary" for="mood-anxious">😔 Anxious</label>
+                                
+                                <input type="radio" class="btn-check" name="mood" id="mood-sad" value="sad">
+                                <label class="btn btn-outline-primary" for="mood-sad">😢 Sad</label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="energy-level" class="form-label">
+                                Energy Level: <span id="energy-value">5</span>/10
+                            </label>
+                            <input type="range" class="form-range" min="0" max="10" value="5" id="energy-level">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="stress-level" class="form-label">
+                                Stress Level: <span id="stress-value">5</span>/10
+                            </label>
+                            <input type="range" class="form-range" min="0" max="10" value="5" id="stress-level">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="mood-note" class="form-label">Notes (optional)</label>
+                            <textarea id="mood-note" class="form-control" rows="3" 
+                                      placeholder="Anything specific you'd like to note about your mood?"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-mood-btn" class="btn btn-primary">Save Mood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "{{ firebase_api_key }}",
+            authDomain: "{{ firebase_project_id }}.firebaseapp.com",
+            projectId: "{{ firebase_project_id }}",
+            storageBucket: "{{ firebase_project_id }}.firebasestorage.app",
+            appId: "{{ firebase_app_id }}"
+        };
+
+        window.firebaseApp = initializeApp(firebaseConfig);
+        window.auth = getAuth(window.firebaseApp);
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <script>
+        // Initialize Feather icons
+        feather.replace();
+        
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+        });
+    </script>
+</body>
+</html>
