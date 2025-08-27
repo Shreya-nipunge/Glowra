@@ -1,0 +1,417 @@
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #06b6d4;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+    --light-color: #f8fafc;
+    --dark-color: #1e293b;
+    --purple-color: #8b5cf6;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    color: #334155;
+    min-height: 100vh;
+}
+
+/* Custom Button Styles */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #4338ca;
+    border-color: #4338ca;
+    transform: translateY(-1px);
+}
+
+/* Main Sections Background - Unified */
+.hero-section,
+section.py-5:not(.bg-primary):not(.bg-dark),
+#features,
+section.py-5.bg-light {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Hero Section */
+.hero-section {
+    color: white;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-section h1 {
+    color: white;
+}
+
+/* Feature Cards */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    background: white !important;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* Feature Card Text Override */
+.feature-card .card-title,
+.feature-card .card-text {
+    color: #334155 !important;
+}
+
+.feature-card .card-text.text-muted {
+    color: #64748b !important;
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* Step Numbers */
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+/* Login Page */
+.login-page {
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-form-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem;
+}
+
+/* Dashboard Styles */
+.dashboard-page {
+    background-color: #f1f5f9;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.section-content {
+    padding: 1rem;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stat Cards */
+.stat-card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mood Components */
+.mood-quick-select {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mood-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.mood-btn:hover, .mood-btn.active {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.mood-slider-container {
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+/* Task Items */
+.task-item {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+}
+
+.task-item.completed {
+    background-color: #f0fdf4;
+    border-color: var(--success-color);
+}
+
+.task-checkbox {
+    transform: scale(1.2);
+    margin-right: 12px;
+}
+
+/* Meditation Cards */
+.meditation-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.meditation-card:hover {
+    transform: translateY(-3px);
+}
+
+.meditation-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Journal Entry */
+#journalEntry {
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    transition: border-color 0.3s ease;
+}
+
+#journalEntry:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Charts */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 60vh;
+        text-align: center;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .mood-quick-select {
+        gap: 5px;
+    }
+    
+    .mood-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4338ca;
+}
+
+/* Loading States */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Achievement Badges */
+.achievement-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--warning-color), #f97316);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 4px;
+}
+
+/* Navigation Active State */
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+/* Card Headers */
+.card-header {
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc !important;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Progress Bars */
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e2e8f0;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Main Sections Text Colors */
+#features h2,
+section.py-5:not(.bg-primary):not(.bg-dark) h2 {
+    color: white !important;
+}
+
+#features .lead,
+section.py-5:not(.bg-primary):not(.bg-dark) .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+section.py-5:not(.bg-primary):not(.bg-dark) h4 {
+    color: white !important;
+}
+
+section.py-5:not(.bg-primary):not(.bg-dark) p:not(.feature-card p) {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Force Feature Card Text Visibility */
+.card.feature-card .card-title {
+    color: #1e293b !important;
+}
+
+.card.feature-card .card-text {
+    color: #64748b !important;
+}
+
+/* Keep Icon Colors */
+.card.feature-card .feature-icon i.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.card.feature-card .feature-icon i.text-success {
+    color: var(--success-color) !important;
+}
+
+.card.feature-card .feature-icon i.text-info {
+    color: var(--info-color) !important;
+}
+
+.card.feature-card .feature-icon i.text-warning {
+    color: var(--warning-color) !important;
+}
+
+.card.feature-card .feature-icon i.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.card.feature-card .feature-icon i.text-purple {
+    color: var(--purple-color) !important;
+}
+
+/* Utility Classes */
+.text-purple {
+    color: var(--purple-color) !important;
+}
+
+.bg-purple {
+    background-color: var(--purple-color) !important;
+}
+
+.border-radius-lg {
+    border-radius: 12px !important;
+}
+
+.shadow-custom {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}

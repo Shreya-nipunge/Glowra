@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glowra - Mental Wellness Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fas fa-leaf me-2"></i>Glowra
+            </a>
+            <div class="ms-auto">
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="display-4 fw-bold text-dark mb-4">
+                        Your Journey to Mental Wellness Starts Here
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        Discover inner peace through mindful tracking, journaling, and personalized wellness plans. 
+                        Join thousands who've transformed their mental health with Glowra.
+                    </p>
+                    <div class="text-center mb-3">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-rocket me-2"></i>Get Started Free
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <a href="#features" class="btn btn-outline-secondary">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark">Everything You Need for Mental Wellness</h2>
+                <p class="lead text-muted">Comprehensive tools designed by wellness experts</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Mood Tracking -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-smile fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Mood Tracking</h5>
+                            <p class="card-text text-muted">
+                                Track your daily emotions with our intuitive mood slider. 
+                                Understand patterns and triggers over time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI-Powered Journaling -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-pen-fancy fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">AI-Powered Journaling</h5>
+                            <p class="card-text text-muted">
+                                Express your thoughts and receive personalized insights from our AI. 
+                                Discover hidden patterns in your mental state.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Wellness Plans -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-tasks fa-3x text-info"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Daily Wellness Plans</h5>
+                            <p class="card-text text-muted">
+                                Personalized micro-tasks designed to boost your mental health. 
+                                Build streaks and earn points for consistency.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meditation Library -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-om fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Meditation Library</h5>
+                            <p class="card-text text-muted">
+                                Access guided meditations for every mood and moment. 
+                                From quick breathing exercises to deep relaxation sessions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-chart-line fa-3x text-danger"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Analytics Dashboard</h5>
+                            <p class="card-text text-muted">
+                                Visualize your progress with beautiful charts and graphs. 
+                                Track mood trends, streaks, and achievements.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card feature-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-trophy fa-3x text-purple"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Progress Tracking</h5>
+                            <p class="card-text text-muted">
+                                Celebrate your journey with achievement badges and milestone tracking. 
+                                Stay motivated with gamified wellness goals.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark">How Glowra Works</h2>
+                <p class="lead text-muted">Three simple steps to better mental health</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="step-number mb-3">1</div>
+                        <h4 class="fw-bold">Track Your Mood</h4>
+                        <p class="text-muted">
+                            Start each day by recording how you feel. Our simple interface makes it easy to capture your emotional state.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="step-number mb-3">2</div>
+                        <h4 class="fw-bold">Complete Daily Tasks</h4>
+                        <p class="text-muted">
+                            Follow personalized wellness activities designed for your needs. Build healthy habits one step at a time.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="step-number mb-3">3</div>
+                        <h4 class="fw-bold">Track Your Progress</h4>
+                        <p class="text-muted">
+                            Watch your mental wellness improve over time with detailed analytics and achievement tracking.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Mental Health?</h2>
+            <p class="lead mb-4">Join thousands of users who've found peace and balance with Glowra</p>
+            <a href="{{ url_for('login') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Start Your Journey Today
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-leaf me-2"></i>Glowra</h5>
+                    <p class="text-muted">Your journey to mental wellness starts here.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2025 Glowra. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

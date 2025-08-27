@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Glowra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-leaf me-2"></i>Glowra
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="overview">
+                            <i class="fas fa-tachometer-alt me-1"></i>Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="mood">
+                            <i class="fas fa-smile me-1"></i>Mood
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="journal">
+                            <i class="fas fa-pen-fancy me-1"></i>Journal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="plan">
+                            <i class="fas fa-tasks me-1"></i>Daily Plan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="meditation">
+                            <i class="fas fa-lotus-position me-1"></i>Meditation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="analytics">
+                            <i class="fas fa-chart-line me-1"></i>Analytics
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <img id="userAvatar" src="" alt="Avatar" class="rounded-circle me-1" width="24" height="24">
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Overview Section -->
+            <div id="overview-section" class="col-12 section-content">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">Welcome back, <span id="welcomeUserName">User</span>!</h2>
+                    <p class="text-muted">Here's your wellness overview for today</p>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <!-- Quick Stats -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-primary">
+                                        <i class="fas fa-smile text-white"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-muted">Today's Mood</h6>
+                                        <h4 class="mb-0 fw-bold" id="todayMood">Not Set</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-success">
+                                        <i class="fas fa-fire text-white"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-muted">Current Streak</h6>
+                                        <h4 class="mb-0 fw-bold" id="currentStreak">0 days</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-warning">
+                                        <i class="fas fa-star text-white"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-muted">Total Points</h6>
+                                        <h4 class="mb-0 fw-bold" id="totalPoints">0</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-info">
+                                        <i class="fas fa-check text-white"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-muted">Tasks Done</h6>
+                                        <h4 class="mb-0 fw-bold" id="tasksCompleted">0/0</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">Quick Mood Check</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">How are you feeling right now?</p>
+                                <div class="mood-quick-select mb-3">
+                                    <button class="btn btn-outline-primary mood-btn" data-mood="1">😢</button>
+                                    <button class="btn btn-outline-primary mood-btn" data-mood="3">😐</button>
+                                    <button class="btn btn-outline-primary mood-btn" data-mood="5">🙂</button>
+                                    <button class="btn btn-outline-primary mood-btn" data-mood="7">😊</button>
+                                    <button class="btn btn-outline-primary mood-btn" data-mood="10">😁</button>
+                                </div>
+                                <button class="btn btn-primary" onclick="showSection('mood')">
+                                    Detailed Mood Tracking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">Today's Tasks</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="quickTasksList">
+                                    <p class="text-muted">Loading your daily tasks...</p>
+                                </div>
+                                <button class="btn btn-success" onclick="showSection('plan')">
+                                    View All Tasks
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mood Section -->
+            <div id="mood-section" class="col-12 section-content d-none">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">Mood Tracking</h2>
+                    <p class="text-muted">Track and understand your emotional patterns</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">How are you feeling today?</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mood-slider-container mb-4">
+                                    <label for="moodSlider" class="form-label">Mood Level (1-10)</label>
+                                    <input type="range" class="form-range" min="1" max="10" step="1" id="moodSlider" value="5">
+                                    <div class="d-flex justify-content-between text-muted">
+                                        <small>Very Low</small>
+                                        <small>Neutral</small>
+                                        <small>Very High</small>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <span id="moodEmoji" class="fs-1">🙂</span>
+                                        <p class="mb-0" id="moodLabel">Feeling Okay</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="moodNotes" class="form-label">Additional Notes (Optional)</label>
+                                    <textarea class="form-control" id="moodNotes" rows="3" placeholder="What's affecting your mood today?"></textarea>
+                                </div>
+
+                                <button class="btn btn-primary" id="saveMoodBtn">
+                                    <i class="fas fa-save me-2"></i>Save Mood Entry
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Recent Moods</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentMoods">
+                                    <p class="text-muted">No mood entries yet today.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Section -->
+            <div id="journal-section" class="col-12 section-content d-none">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">AI-Powered Journaling</h2>
+                    <p class="text-muted">Express your thoughts and receive personalized insights</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">Today's Journal Entry</h5>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control mb-3" id="journalEntry" rows="8" 
+                                    placeholder="What's on your mind today? Share your thoughts, feelings, and experiences..."></textarea>
+                                
+                                <button class="btn btn-primary" id="saveJournalBtn">
+                                    <i class="fas fa-brain me-2"></i>Save & Get AI Insights
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm mt-4" id="insightsCard" style="display: none;">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">AI Insights</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="aiInsights">
+                                    <!-- AI insights will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Recent Entries</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentJournalEntries">
+                                    <p class="text-muted">No journal entries yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Plan Section -->
+            <div id="plan-section" class="col-12 section-content d-none">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">Daily Wellness Plan</h2>
+                    <p class="text-muted">Complete your personalized micro-tasks and build streaks</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold">Today's Tasks</h5>
+                                <span class="badge bg-primary fs-6" id="taskProgress">0/0 Complete</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="dailyTasksList">
+                                    <p class="text-muted">Loading your personalized tasks...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Streak & Points</h6>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-fire fa-3x text-warning"></i>
+                                    <h3 class="mt-2 mb-0" id="streakCounter">0</h3>
+                                    <small class="text-muted">Day Streak</small>
+                                </div>
+                                <div class="mb-3">
+                                    <i class="fas fa-star fa-2x text-primary"></i>
+                                    <h4 class="mt-2 mb-0" id="pointsCounter">0</h4>
+                                    <small class="text-muted">Total Points</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Achievements</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="achievementsList">
+                                    <p class="text-muted">Complete tasks to earn achievements!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meditation Section -->
+            <div id="meditation-section" class="col-12 section-content d-none">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">Meditation Library</h2>
+                    <p class="text-muted">Find peace with our guided meditation sessions</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="row g-4" id="meditationLibrary">
+                            <!-- Meditation cards will be dynamically loaded here -->
+                            <p class="text-muted">Loading meditation resources...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="col-12 section-content d-none">
+                <div class="dashboard-header py-4">
+                    <h2 class="fw-bold">Analytics Dashboard</h2>
+                    <p class="text-muted">Visualize your wellness journey and progress</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h5 class="mb-0 fw-bold">Mood Trends (Last 30 Days)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="moodTrendChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Weekly Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="weeklySummary">
+                                    <p class="text-muted">Analyzing your weekly progress...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Task Completion Rate</h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="taskCompletionChart" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-transparent">
+                                <h6 class="mb-0 fw-bold">Achievement Progress</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="achievementProgress">
+                                    <p class="text-muted">Loading achievement data...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "{{ firebase_api_key }}",
+            authDomain: "{{ firebase_project_id }}.firebaseapp.com",
+            projectId: "{{ firebase_project_id }}",
+            storageBucket: "{{ firebase_project_id }}.firebasestorage.app",
+            appId: "{{ firebase_app_id }}",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                document.getElementById('userName').textContent = user.displayName || 'User';
+                document.getElementById('welcomeUserName').textContent = user.displayName || 'User';
+                if (user.photoURL) {
+                    document.getElementById('userAvatar').src = user.photoURL;
+                }
+            } else {
+                // User is signed out, redirect to login
+                window.location.href = "{{ url_for('login') }}";
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                localStorage.removeItem('user');
+                window.location.href = "{{ url_for('index') }}";
+            }).catch((error) => {
+                console.error('Sign out error:', error);
+            });
+        });
+
+        // Make auth available globally
+        window.firebaseAuth = auth;
+    </script>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mood.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/journal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/meditation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+</body>
+</html>

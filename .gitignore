@@ -20,3 +20,24 @@ venv/
 service-account.json
 
 uv.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual env
+.venv/
+venv/
+.local/
+
+# Flask instance (runtime data)
+instance/
+
+# Secrets
+.env
+.env.*
+
+# Replit / editor junk
+*.replit
+.vscode/
